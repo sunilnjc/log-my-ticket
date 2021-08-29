@@ -1,0 +1,42 @@
+<mat-card>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <form [formGroup]="form" (submit)="onSavePost()" *ngIf="!isLoading">
+        <mat-form-field appearance="fill">
+            <mat-label>Salutation</mat-label>
+            <mat-select formControlName="salutation" required>
+                <mat-option *ngFor="let title of titles" [value]="title">
+                    {{title.name}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('salutation').hasError('required')">Please choose one</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="text" formControlName="firstName" placeholder="First Name">
+            <mat-error *ngIf="form.get('firstName').invalid">Please enter a post title.</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="text" formControlName="lastName" placeholder="Last Name">
+            <mat-error *ngIf="form.get('lastName').invalid">Please enter a post title.</mat-error>
+        </mat-form-field>
+        <div>
+            <button mat-stroked-button type="button" (click)="filePicker.click()">Pick Image</button>
+            <input type="file" #filePicker (change)="onImagePicked($event)">
+        </div>
+        <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
+            <img [src]="imagePreview" [alt]="form.value.title">
+        </div>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Date of birth</mat-label>
+            <input matInput formControlName="datePicker">
+            <mat-datepicker-toggle matSuffix [for]="picker">
+                <!-- <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon> -->
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <textarea matInput rows="4" formControlName="content" placeholder="Post Content"></textarea>
+            <mat-error *ngIf="form.get('content').invalid">Please enter a post title.</mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="accent" type="submit">Save Post</button>
+    </form>
+</mat-card>
